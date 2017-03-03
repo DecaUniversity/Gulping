@@ -137,6 +137,10 @@ gulp.task('inject', function () {
 		.pipe(gulp.dest('app'));
 });
 
+
+/**
+ * Serve application using browser-sync
+ */
 gulp.task("serve", function () {
 	
 	browserSync.init({
