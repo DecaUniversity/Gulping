@@ -1,0 +1,9 @@
+{
+  "name": "Gulping",
+  "version": "1.0.0",
+  "description": "Learning the Tricks of Gulp",
+  "main": "index.js",
+  "repository": "git@github.com:DecaUniversity/Gulping.git",
+  "author": "DecaHub",
+  "license": "MIT"
+}
