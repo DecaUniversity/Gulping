@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:DecaUniversity/Gulping.git",
   "author": "DecaHub",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
 }
