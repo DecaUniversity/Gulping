@@ -151,6 +151,10 @@ escape-string-regexp@^1.0.2:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
+esprima@^2.0:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/esprima/-/esprima-2.7.3.tgz#96e3b70d5779f6ad49cd032673d1c312767ba581"
+
 expand-brackets@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-0.1.5.tgz#df07284e342a807cd733ac5af72411e581d1177b"
@@ -371,6 +375,14 @@ graceful-fs@^3.0.0:
 graceful-fs@~1.2.0:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-1.2.3.tgz#15a4806a57547cb2d2dbf27f42e89a8c3451b364"
+
+gulp-strip-debug@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-strip-debug/-/gulp-strip-debug-1.1.0.tgz#5d56b008452edf6823dadecb3e6254d06f3b5d3d"
+  dependencies:
+    gulp-util "^3.0.0"
+    strip-debug "^1.0.0"
+    through2 "^2.0.0"
 
 gulp-util@^3.0.0:
   version "3.0.8"
@@ -954,6 +966,46 @@ rimraf@^2.2.8:
   dependencies:
     glob "^7.0.5"
 
+rocambole-node-remove@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/rocambole-node-remove/-/rocambole-node-remove-1.0.0.tgz#bd49b13dbe6122758374ffd247d8a739e821486f"
+  dependencies:
+    rocambole-token "^1.1.0"
+
+rocambole-node-update@^1.0.0, rocambole-node-update@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rocambole-node-update/-/rocambole-node-update-1.0.1.tgz#a3ffc968b0f3bcd9cf2a9336dc0db7e254c83c5a"
+  dependencies:
+    rocambole-token "^1.2.1"
+
+rocambole-strip-alert@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/rocambole-strip-alert/-/rocambole-strip-alert-1.0.0.tgz#3b255fe6f18d6301f805a14e570b1f1f2dba857f"
+  dependencies:
+    rocambole-node-update "^1.0.1"
+
+rocambole-strip-console@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/rocambole-strip-console/-/rocambole-strip-console-1.0.0.tgz#2b97e3dfa6e19d4528ebe81a94231dc9e8aaca0b"
+  dependencies:
+    rocambole-node-update "^1.0.0"
+
+rocambole-strip-debugger@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/rocambole-strip-debugger/-/rocambole-strip-debugger-1.0.0.tgz#1c5502420c3d6ef5e23a70b80547dfd1d4bbcb76"
+  dependencies:
+    rocambole-node-remove "^1.0.0"
+
+rocambole-token@^1.1.0, rocambole-token@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/rocambole-token/-/rocambole-token-1.2.1.tgz#c785df7428dc3cb27ad7897047bd5238cc070d35"
+
+rocambole@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/rocambole/-/rocambole-0.5.1.tgz#3048f64b2388b8dd8e933f9ad443f0b389ab608f"
+  dependencies:
+    esprima "^2.0"
+
 semver@^4.1.0:
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/semver/-/semver-4.3.6.tgz#300bc6e0e86374f7ba61068b5b1ecd57fc6532da"
@@ -990,6 +1042,15 @@ strip-bom@^1.0.0:
   dependencies:
     first-chunk-stream "^1.0.0"
     is-utf8 "^0.2.0"
+
+strip-debug@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/strip-debug/-/strip-debug-1.1.1.tgz#698241986769dcef513dc6c7ca629b06bc9f217b"
+  dependencies:
+    rocambole "^0.5.0"
+    rocambole-strip-alert "^1.0.0"
+    rocambole-strip-console "^1.0.0"
+    rocambole-strip-debugger "^1.0.0"
 
 supports-color@^2.0.0:
   version "2.0.0"
@@ -1053,6 +1114,12 @@ vinyl-fs@^0.3.0:
     strip-bom "^1.0.0"
     through2 "^0.6.1"
     vinyl "^0.4.0"
+
+vinyl-paths@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/vinyl-paths/-/vinyl-paths-2.1.0.tgz#00820437cba38262cef8802d840f93e3392ee44b"
+  dependencies:
+    through2 "^2.0.0"
 
 vinyl@^0.4.0:
   version "0.4.6"

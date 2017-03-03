@@ -2,6 +2,8 @@
 
 const gulp = require("gulp");
 const del = require("del");
+const stripDebug = require("gulp-strip-debug");
+const vinylPaths = require("vinyl-paths");
 
 const printTask = function (taskName) {
 	
@@ -61,3 +63,21 @@ gulp.task("clean:deleteTest", function () {
 	])
 	
 });
+
+/**
+ * Deleting files in a pipeline
+ * Deletes files after processing them in a pipeline
+ * Use vinyl-paths to easily get the file path of files in the stream
+ * and pass it to the del method
+ */
+
+gulp.task("clean:deleteInPipeline", function () {
+	
+	return gulp.src("app/deleteInPipeline")
+		.pipe(vinylPaths(del))
+		.pipe(stripDebug())
+		.pipe(gulp.dest("dist"));
+	
+});
+
+
