@@ -13,6 +13,9 @@ const gutil = require('gulp-util');
 const injector = require('gulp-inject');
 const path = require("path");
 
+const browserSync = require("browser-sync");
+const reload = browserSync.reload;
+
 const printTask = function (taskName) {
 	
 	let bannerFrame = "";
@@ -92,6 +95,7 @@ gulp.task('scss-watch', function(){
 				.then(function(paths){
 					console.log("deleted files: " + paths.join('\n'));
 					runSequence('inject');
+					reload();
 				});
 
 		} else if (event.type === 'added'){
@@ -99,12 +103,14 @@ gulp.task('scss-watch', function(){
 			console.log(event.path + " is added. Adding corresponding .css files to app/css");
 			
 			runSequence('sass', 'inject');
+			reload();
 
 		} else if (event.type === 'changed'){
 
 			console.log(event.path + " changed. Sassing it and injecting it");
 			
 			runSequence('sass', 'inject');
+			reload();
 
 		}
 	})
@@ -131,12 +137,22 @@ gulp.task('inject', function () {
 		.pipe(gulp.dest('app'));
 });
 
+gulp.task("serve", function () {
+	
+	browserSync.init({
+		server: {
+			baseDir: "app"
+		}
+	})
+	
+});
+
 /**
  * Initialization task
  */
 gulp.task("init", function() {
 
-	runSequence('sass', 'inject', 'scss-watch');
+	runSequence('sass', 'inject', 'scss-watch', "serve");
 
 });
 
@@ -147,4 +163,4 @@ gulp.task("default", function() {
 
 	runSequence('init');
 
-})
+});

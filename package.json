@@ -7,6 +7,7 @@
   "author": "DecaHub",
   "license": "MIT",
   "devDependencies": {
+    "browser-sync": "^2.18.8",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-filter": "^5.0.0",
