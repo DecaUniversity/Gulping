@@ -6,8 +6,12 @@ const stripDebug = require("gulp-strip-debug");
 const vinylPaths = require("vinyl-paths");
 
 const runSequence = require("run-sequence");
-
 const sass = require("gulp-sass");
+const watch = require("gulp-watch");
+const gutil = require('gulp-util');
+
+const injector = require('gulp-inject');
+const path = require("path");
 
 const printTask = function (taskName) {
 	
@@ -47,60 +51,12 @@ const printTask = function (taskName) {
 	
 };
 
-gulp.task("default", ["clean:deleteTest"], function () {
-	
-	printTask("default");
-	
-});
-
 /**
- * Deleting files and folders
+ * Compiles .scss to .css
  */
-
-gulp.task("clean:deleteTest", function () {
+gulp.task('sass', function() {
 	
-	printTask("clean:deleteTest");
-	
-	return del([
-		"app/deleteTest/folder1",
-		"app/deleteTest/**/**.js"
-	])
-	
-});
-
-/**
- * Deleting files in a pipeline
- * Deletes files after processing them in a pipeline
- * Use vinyl-paths to easily get the file path of files in the stream
- * and pass it to the del method
- */
-
-gulp.task("clean:deleteInPipeline", function () {
-	
-	printTask("clean:deleteInPipeline");
-	
-	return gulp.src("app/deleteInPipeline")
-		.pipe(vinylPaths(del))
-		.pipe(stripDebug())
-		.pipe(gulp.dest("dist"));
-	
-});
-
-// Deletes the .scss files and scss folder after compiling; keeps the .css
-
-gulp.task("only-css", function () {
-	
-	printTask("only-css");
-	
-	runSequence("sass-del-scss", "del-scss-dir");
-	
-});
-
-// Compiles .scss into .css
-
-gulp.task("sass-del-scss", function () {
-	
-	printTask("sass-del-scss");
+	printTask("sass");
 	
 	return gulp.src("app/scss/**/*.scss")
 		.pipe(sass())
@@ -108,14 +64,87 @@ gulp.task("sass-del-scss", function () {
 	
 });
 
-// Deletes the scss folder
+/**
+ * Watch scss files for changes.
+ * Perform actions based on the file event: added, deleted, changed.
+ */
+gulp.task('scss-watch', function(){
 
-gulp.task("del-scss-dir", function () {
+	printTask("scss-watch");
+
+	let watcher = gulp.watch('app/scss/**/*.scss', function(){
+		console.log("Runninig deleteWatch sequence");
+
+	});
 	
-	printTask("del-scss-dir");
-	
-	return del(["app/scss"]);
-	
+	watcher.on('change', function(event){
+
+		console.log(`Event type: ${event.type}`)
+
+		if (event.type === 'deleted'){
+			console.log(event.path + " is deleted. Deleting corresponding .css files from app/css");
+			
+			let fileNameBase = path.basename(event.path, '.scss');
+			
+			console.log(fileNameBase);
+			
+			del(['app/css/' + fileNameBase + '.*'])
+				.then(function(paths){
+					console.log("deleted files: " + paths.join('\n'));
+					runSequence('inject');
+				});
+
+		} else if (event.type === 'added'){
+
+			console.log(event.path + " is added. Adding corresponding .css files to app/css");
+			
+			runSequence('sass', 'inject');
+
+		} else if (event.type === 'changed'){
+
+			console.log(event.path + " changed. Sassing it and injecting it");
+			
+			runSequence('sass', 'inject');
+
+		}
+	})
 });
 
+/**
+ * Injects .scss files into index.html 
+ */
+gulp.task('inject', function () {
 
+	let injectOptions = {
+		ignorePath: 'app/',
+		addRootSlash: false,
+		empty: true
+	};
+
+	let injectSrc = gulp.src([
+		"app/css/**/*.css"
+		], {read: false}
+	);
+
+	return gulp.src('app/index.html')
+		.pipe(injector(injectSrc, injectOptions))
+		.pipe(gulp.dest('app'));
+});
+
+/**
+ * Initialization task
+ */
+gulp.task("init", function() {
+
+	runSequence('sass', 'inject', 'scss-watch');
+
+});
+
+/**
+ * Default task
+ */
+gulp.task("default", function() {
+
+	runSequence('init');
+
+})
