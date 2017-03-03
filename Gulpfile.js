@@ -1,6 +1,7 @@
 "use strict";
 
 const gulp = require("gulp");
+const del = require("del");
 
 const printTask = function (taskName) {
 	
@@ -12,8 +13,6 @@ const printTask = function (taskName) {
 	let totalBannerFrameLength = (bannerFrameOffSet * 2) + lengthTaskName;
 	let topLimit = totalBannerFrameLength;
 	let taskLetter = 0;
-	
-	console.log(totalBannerFrameLength);
 	
 	while (totalBannerFrameLength > 0) {
 		
@@ -42,8 +41,23 @@ const printTask = function (taskName) {
 	
 };
 
-gulp.task("default", function () {
+gulp.task("default", ["clean:deleteTest"], function () {
 	
 	printTask("default");
+	
+});
+
+/**
+ * Deleting files and folders
+ */
+
+gulp.task("clean:deleteTest", function () {
+	
+	printTask("clean:deleteTest");
+	
+	return del([
+		"app/deleteTest/folder1",
+		"app/deleteTest/**/**.js"
+	])
 	
 });
