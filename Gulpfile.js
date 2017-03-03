@@ -5,6 +5,8 @@ const del = require("del");
 const stripDebug = require("gulp-strip-debug");
 const vinylPaths = require("vinyl-paths");
 
+const sass = require("gulp-sass");
+
 const printTask = function (taskName) {
 	
 	let bannerFrame = "";
@@ -77,6 +79,17 @@ gulp.task("clean:deleteInPipeline", function () {
 		.pipe(vinylPaths(del))
 		.pipe(stripDebug())
 		.pipe(gulp.dest("dist"));
+	
+});
+
+// Delete the .scss files after compiling but keep the .css
+
+gulp.task("deleteSCSS", function () {
+	
+	return gulp.src("app/deleteSCSS/**/*.scss")
+		.pipe(vinylPaths(del))
+		.pipe(sass())
+		.pipe(gulp.dest("app/compiledCSS"));
 	
 });
 
