@@ -5,6 +5,8 @@ const del = require("del");
 const stripDebug = require("gulp-strip-debug");
 const vinylPaths = require("vinyl-paths");
 
+const runSequence = require("run-sequence");
+
 const sass = require("gulp-sass");
 
 const printTask = function (taskName) {
@@ -75,6 +77,8 @@ gulp.task("clean:deleteTest", function () {
 
 gulp.task("clean:deleteInPipeline", function () {
 	
+	printTask("clean:deleteInPipeline");
+	
 	return gulp.src("app/deleteInPipeline")
 		.pipe(vinylPaths(del))
 		.pipe(stripDebug())
@@ -82,14 +86,35 @@ gulp.task("clean:deleteInPipeline", function () {
 	
 });
 
-// Delete the .scss files after compiling but keep the .css
+// Deletes the .scss files and scss folder after compiling; keeps the .css
 
-gulp.task("deleteSCSS", function () {
+gulp.task("only-css", function () {
 	
-	return gulp.src("app/deleteSCSS/**/*.scss")
-		.pipe(vinylPaths(del))
+	printTask("only-css");
+	
+	runSequence("sass-del-scss", "del-scss-dir");
+	
+});
+
+// Compiles .scss into .css
+
+gulp.task("sass-del-scss", function () {
+	
+	printTask("sass-del-scss");
+	
+	return gulp.src("app/scss/**/*.scss")
 		.pipe(sass())
-		.pipe(gulp.dest("app/compiledCSS"));
+		.pipe(gulp.dest("app/css"));
+	
+});
+
+// Deletes the scss folder
+
+gulp.task("del-scss-dir", function () {
+	
+	printTask("del-scss-dir");
+	
+	return del(["app/scss"]);
 	
 });
 
