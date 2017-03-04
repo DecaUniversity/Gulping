@@ -15,43 +15,7 @@ const path = require("path");
 const browserSync = require("browser-sync");
 const reload = browserSync.reload;
 
-const printTask = function (taskName) {
-	
-	let bannerFrame = "";
-	let taskNameStrip = "";
-	let bannerFrameOffSet = 20;
-	let lengthTaskName = taskName.length;
-	
-	let totalBannerFrameLength = (bannerFrameOffSet * 2) + lengthTaskName;
-	let topLimit = totalBannerFrameLength;
-	let taskLetter = 0;
-	
-	while (totalBannerFrameLength > 0) {
-		
-		if (totalBannerFrameLength == topLimit || totalBannerFrameLength == 1) {
-			
-			taskNameStrip += "*";
-			
-		} else if (totalBannerFrameLength <= (topLimit - bannerFrameOffSet)
-			&& totalBannerFrameLength > bannerFrameOffSet) {
-			
-			taskNameStrip += taskName[taskLetter++];
-			
-		}else {
-			
-			taskNameStrip += " ";
-		
-		}
-		
-		bannerFrame += "*";
-		totalBannerFrameLength--;
-	}
-	
-	console.log(bannerFrame);
-	console.log(`${taskNameStrip}`);
-	console.log(bannerFrame);
-	
-};
+const util = require("./utils.js");
 
 let srcFiles = {
 	
@@ -84,7 +48,7 @@ let destDir = {
  */
 gulp.task('sass', function() {
 	
-	printTask("sass");
+	util.printTask("sass");
 	
 	return gulp.src(srcFiles.scss)
 		.pipe(sass())
@@ -99,7 +63,7 @@ gulp.task('sass', function() {
 
 gulp.task('scss-watch', function(){
 
-	printTask("scss-watch");
+	util.printTask("scss-watch");
 
 	let watcher = watch(srcFiles.scss, function(){
 		console.log("Runninig deleteWatch sequence");
@@ -182,6 +146,8 @@ gulp.task('scss-watch', function(){
 
 gulp.task('html-watch', function () {
 	
+	util.printTask("html-watch");
+	
 	let watcher = watch(srcFiles.html);
 	
 	watcher.on('change', function (filepath) {
@@ -196,6 +162,8 @@ gulp.task('html-watch', function () {
  * Injects .scss files into index.html 
  */
 gulp.task('inject', function () {
+	
+	util.printTask("inject");
 
 	let injectOptions = {
 		ignorePath: 'app/',
@@ -219,6 +187,8 @@ gulp.task('inject', function () {
  */
 gulp.task("serve", function () {
 	
+	util.printTask("serve");
+	
 	browserSync.init({
 		server: {
 			baseDir: "app"
@@ -231,6 +201,8 @@ gulp.task("serve", function () {
  * Initialization task
  */
 gulp.task("init", function() {
+	
+	util.printTask("init");
 
 	runSequence('clean:css','sass', 'inject', 'scss-watch', 'html-watch', "serve");
 
@@ -240,6 +212,8 @@ gulp.task("init", function() {
  * Deletes the dist/css folder
  */
 gulp.task("clean:css", function () {
+	
+	util.printTask("clean:css");
 	
 	return del([
 		"app/dist/css"
@@ -251,6 +225,8 @@ gulp.task("clean:css", function () {
  * Default task
  */
 gulp.task("default", function() {
+	
+	util.printTask("default");
 
 	runSequence('init');
 
