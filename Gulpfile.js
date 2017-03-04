@@ -2,7 +2,6 @@
 
 const gulp = require("gulp");
 const del = require("del");
-const stripDebug = require("gulp-strip-debug");
 const vinylPaths = require("vinyl-paths");
 
 const runSequence = require("run-sequence");
@@ -65,6 +64,11 @@ let srcFiles = {
 		"!app/lib",
 		"!app/lib/**",
 		"app/**/*.html"
+	],
+	all: [
+		"!app/lib",
+		"!app/lib/**",
+		"app/**/**.*"
 	]
 	
 };
@@ -97,81 +101,83 @@ gulp.task('scss-watch', function(){
 
 	printTask("scss-watch");
 
-	let watcher = gulp.watch(srcFiles.scss, function(){
+	let watcher = watch(srcFiles.scss, function(){
 		console.log("Runninig deleteWatch sequence");
 
 	});
 	
-	watcher.on('change', function(event){
+	watcher.on('unlink', function (filepath) {
+		
+		console.log(filepath + " is deleted. Deleting corresponding .css files from app/css");
 
-		console.log(`Event type: ${event.type}`);
+		console.log(filepath);
 
-		if (event.type === 'deleted'){
-			console.log(event.path + " is deleted. Deleting corresponding .css files from app/css");
-			
-			console.log(event.path);
-			
-			let fullPath = event.path;
-			let rootToCSS = "app/dist/css/";
-			let fileNameBase = path.basename(event.path, '.scss');
-			let pathToCSS = "";
-			let fullPathToCSS = "";
-			
-			let fullPathArray = fullPath.split("/");
-			let index = 0;
-			
-			console.log(fullPathArray);
-			
-			for (let i = 0; i < fullPathArray.length; i++) {
-				
-				if (fullPathArray[i] === "app") {
-					
-					index = i;
-					
-					console.log(`index: ${index}, ${fullPathArray[i]}`);
-					
-					break;
-					
-				}
-			}
-			
-			for (let i = index; i < fullPathArray.length - 1; i++) {
-				
-				console.log(i);
+		let fullPath = filepath;
+		let rootToCSS = "app/dist/css/";
+		let fileNameBase = path.basename(filepath, '.scss');
+		let pathToCSS = "";
+		let fullPathToCSS = "";
 
-				if (i > index && i < fullPathArray.length - 1) {
+		let fullPathArray = fullPath.split("/");
+		let index = 0;
 
-					pathToCSS += fullPathArray[i] + "/";
+		console.log(fullPathArray);
 
-				}
+		for (let i = 0; i < fullPathArray.length; i++) {
+
+			if (fullPathArray[i] === "app") {
+
+				index = i;
+
+				console.log(`index: ${index}, ${fullPathArray[i]}`);
+
+				break;
 
 			}
-			
-			fullPathToCSS = rootToCSS + pathToCSS + fileNameBase + ".*";
-			
-			del(fullPathToCSS)
-				.then(function(paths){
-					console.log("deleted files: " + paths.join('\n'));
-					runSequence('inject');
-					reload();
-				});
+		}
 
-		} else if (event.type === 'added'){
+		for (let i = index; i < fullPathArray.length - 1; i++) {
 
-			console.log(event.path + " is added. Adding corresponding .css files to app/css");
-			
-			runSequence('sass', 'inject');
-			reload();
+			console.log(i);
 
-		} else if (event.type === 'changed'){
+			if (i > index && i < fullPathArray.length - 1) {
 
-			console.log(event.path + " changed. Sassing it and injecting it");
-			
-			runSequence('sass', 'inject');
-			reload();
+				pathToCSS += fullPathArray[i] + "/";
+
+			}
 
 		}
-	})
+
+		fullPathToCSS = rootToCSS + pathToCSS + fileNameBase + ".*";
+
+		del(fullPathToCSS)
+			.then(function(paths){
+				console.log("deleted files: " + paths.join('\n'));
+				runSequence('inject');
+				reload();
+			});
+		
+	});
+	
+	watcher.on('add', function (filepath) {
+		
+		console.log(filepath + " is added. Adding corresponding .css files to app/css");
+
+		runSequence('sass', 'inject');
+		reload();
+		
+	});
+	
+	
+	watcher.on('change', function (filepath) {
+		
+		console.log(filepath + " changed. Sassing it and injecting it");
+
+		runSequence('sass', 'inject');
+		reload();
+		
+	});
+	
 });
 
 gulp.task('html-watch', function () {
