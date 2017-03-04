@@ -1,0 +1,42 @@
+
+$yellowtail: "Yellowtail", cursive;
+
+body {
+	
+	background: #FC8D93;
+	
+}
+
+h1 {
+	
+	font-family: $yellowtail;
+	color: white;
+	font-size: 1500%;
+	
+}
+
+#Gulp-Logo {
+	fill: white;
+}
+
+#gulp-banner {
+	
+	position: absolute;
+	margin: auto;
+	
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	
+	width: 650px;
+	height: 450px;
+	
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	
+	background: #E63C44;
+	
+}
