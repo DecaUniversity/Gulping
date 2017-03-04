@@ -147,18 +147,8 @@ gulp.task('scss-watch', function(){
 
 			}
 			
-			console.log(`Path to CSS: ${pathToCSS}`);
-			console.log(`More complete path: ${rootToCSS}${pathToCSS}${fileNameBase}.css`);
-			
 			fullPathToCSS = rootToCSS + pathToCSS + fileNameBase + ".*";
 			
-			console.log(fullPathToCSS);
-			
-			// console.log(fileNameBase);
-			//
-			// console.log(path.relative('app/dist/css/', event.path));
-			
-			// del([destDir.scss + fileNameBase + '.*'])
 			del(fullPathToCSS)
 				.then(function(paths){
 					console.log("deleted files: " + paths.join('\n'));
@@ -241,14 +231,8 @@ gulp.task("init", function() {
 });
 
 /**
- * Default task
+ * Deletes the dist/css folder
  */
-gulp.task("default", function() {
-
-	runSequence('init');
-
-});
-
 gulp.task("clean:css", function () {
 	
 	return del([
@@ -257,27 +241,14 @@ gulp.task("clean:css", function () {
 	
 });
 
-// let scssReplace2 = function (infoPieces) {
-//
-// 	infoPieces.forEach(function (piece, index) {
-//
-// 		if (piece == "scss") {
-//
-// 			console.log("YES!");
-// 			infoPieces[index] = "css";
-//
-// 		}
-//
-// 	});
-//
-// 	for (let i = 0; i < infoPieces.length; i++) {
-//
-// 		if (infoPieces[i] === "scss") {
-// 			infoPieces[i] = "css"
-// 		}
-//
-// 	}
-//
-// 	return pieces;
-//
-// };
+/**
+ * Default task
+ */
+gulp.task("default", function() {
+
+	runSequence('init');
+
+});
+
+
+
