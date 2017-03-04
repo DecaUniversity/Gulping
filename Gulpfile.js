@@ -182,9 +182,9 @@ gulp.task('scss-watch', function(){
 
 gulp.task('html-watch', function () {
 	
-	let watcher = gulp.watch(srcFiles.html);
+	let watcher = watch(srcFiles.html);
 	
-	watcher.on('change', function (event) {
+	watcher.on('change', function (filepath) {
 		
 		reload();
 		
