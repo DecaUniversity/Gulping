@@ -1,17 +1,18 @@
 "use strict";
 
 const gulp = require("gulp");
-const del = require("del");
-const vinylPaths = require("vinyl-paths");
 
+const del = require("del");
+const path = require("path");
 const runSequence = require("run-sequence");
-const sass = require("gulp-sass");
-const babel = require("gulp-babel");
+
 const watch = require("gulp-watch");
-const gutil = require('gulp-util');
+
+const sass = require("gulp-sass");
+const eslint = require("gulp-eslint");
+const babel = require("gulp-babel");
 
 const injector = require('gulp-inject');
-const path = require("path");
 
 const browserSync = require("browser-sync");
 const reload = browserSync.reload;
@@ -68,6 +69,14 @@ gulp.task('sass', function() {
 	
 });
 
+gulp.task("eslint", function () {
+	
+	return gulp.src(srcFiles.js)
+		.pipe(eslint())
+		.pipe(eslint.format());
+	
+});
+
 /**
  * Transpile ES6 to ES5
  */
@@ -97,14 +106,14 @@ gulp.task("js-watch", function () {
 	
 	watcher.on("change", function (filepath) {
 		
-		runSequence('transpile', 'inject');
+		runSequence('eslint', 'transpile', 'inject');
 		// reload();
 		
 	});
 	
 	watcher.on("add", function (filepath) {
 		
-		runSequence('transpile', 'inject');
+		runSequence('eslint', 'transpile', 'inject');
 		
 	});
 	
@@ -309,7 +318,7 @@ gulp.task("init", function() {
 	
 	util.printTask("init");
 
-	runSequence('clean:dist','sass', 'transpile', 'inject', 'scss-watch', 'html-watch', 'js-watch', "serve");
+	runSequence('clean:dist','sass', 'eslint', 'transpile', 'inject', 'scss-watch', 'html-watch', 'js-watch', "serve");
 
 });
 
