@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:all",
+    "parserOptions": {
+    },
+    "globals": {
+        "angular": true
+    },
+    "rules": {
+        "indent": [
+            "error",
+            "tab",
+            {
+                "SwitchCase": 1,
+                "MemberExpression": 1
+            }
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-console": ["error", { "allow": ["log", "warn", "error"] }],
+        "no-tabs": "off",
+        "no-trailing-spaces": "off",
+        "quote-props": [2, "as-needed"],
+        "one-var": ["error", "never"],
+        "max-statements": ["error", 20],
+        "dot-location": ["error", "property"],
+        "prefer-arrow-callback": 0,
+        "func-names": 0,
+        "sort-keys": 0,
+        "no-magic-numbers": ["error", {"ignore": [-1, 0, 1, 2]}],
+        "require-jsdoc": 0,
+        "valid-jsdoc": 0,
+        "consistent-this": 0,
+        "no-unused-vars": 0,
+        "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
+        "prefer-destructuring": 0
+    }
+}
