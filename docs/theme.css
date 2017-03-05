@@ -36,4 +36,29 @@ h1 {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #E63C44; }
+  background: #E63C44;
+  text-decoration: none;
+  border: 0; }
+
+#yeah {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100%; }
+
+#gulp-banner:hover * {
+  color: #E63C44;
+  fill: #E63C44; }
+
+#gulp-banner:hover {
+  background: white; }
