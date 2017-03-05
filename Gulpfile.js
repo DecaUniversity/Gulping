@@ -66,6 +66,27 @@ let srcFiles = {
 		'app/dist/**/*controller.js',
 		'app/dist/**/*component.js',
 		'app/dist/**/**.js'
+	],
+	injectorAngularDocs: [
+		'docs/**/*.css',
+		'docs/app.js',
+		'docs/**/*module.js',
+		'docs/**/*constants.js',
+		'docs/**/*provider.js',
+		'docs/**/*enum.js',
+		'docs/**/*model.js',
+		'docs/**/*config.js',
+		'docs/**/*filter.js',
+		'docs/**/*directive.js',
+		'docs/**/*decorator.js',
+		'docs/**/*interceptor.js',
+		'docs/**/*service.js',
+		'docs/**/*workflow.js',
+		'docs/**/*repository.js',
+		'docs/**/*resolver.js',
+		'docs/**/*controller.js',
+		'docs/**/*component.js',
+		'docs/**/**.js'
 	]
 	
 };
@@ -284,24 +305,46 @@ gulp.task('html-watch', function () {
 });
 
 /**
- * Injects .scss files into index.html 
+ * Injects .scss files into index.html
  */
 gulp.task('inject', function () {
 	
 	util.printTask("inject");
-
+	
 	let injectOptions = {
 		ignorePath: 'app/',
 		addRootSlash: false,
 		empty: true
 	};
-
+	
 	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
-
+	
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
 		.pipe(gulp.dest('app'));
 });
+
+/**
+ * For docs folder
+ * Injects .scss files into index.html
+ */
+gulp.task('inject:docs', function () {
+	
+	util.printTask("inject:docs");
+	
+	let injectOptions = {
+		ignorePath: 'docs/',
+		addRootSlash: false,
+		empty: true
+	};
+	
+	let injectSrc = gulp.src(srcFiles.injectorAngularDocs, {read: false});
+	
+	return gulp.src('docs/index.html')
+		.pipe(injector(injectSrc, injectOptions))
+		.pipe(gulp.dest('docs'));
+});
+
 
 
 /**
@@ -414,7 +457,7 @@ gulp.task("clean:docs", function () {
 
 gulp.task("build:docs", function () {
 	
-	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs");
+	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs", "inject:docs");
 	
 });
 
