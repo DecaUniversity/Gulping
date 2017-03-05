@@ -329,15 +329,20 @@ gulp.task("serve", function () {
 gulp.task("init", function() {
 	
 	util.printTask("init");
-
-	runSequence('clean:dist','sass', 'eslint', 'transpile', 'inject', 'scss-watch', 'html-watch', 'js-watch', "serve");
-
-});
-
-gulp.task("clean:dist", function () {
 	
-	runSequence('clean:js', 'clean:css');
+	const cleaning = [
+		"clean:css",
+		"clean:js"
+	];
 	
+	const watching = [
+		'scss-watch',
+		'html-watch',
+		'js-watch'
+	];
+
+	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', watching, "serve");
+
 });
 
 /**
@@ -359,7 +364,7 @@ gulp.task("clean:css", function () {
 
 gulp.task("clean:js", function () {
 	
-	util.printTask("clean:css");
+	util.printTask("clean:js");
 	
 	return del([
 		"app/dist/js"
