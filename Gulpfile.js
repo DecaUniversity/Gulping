@@ -13,6 +13,7 @@ const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
 const eslint = require("gulp-eslint");
 const babel = require("gulp-babel");
+const sourcemaps = require("gulp-sourcemaps");
 
 const injector = require('gulp-inject');
 
@@ -27,6 +28,8 @@ let srcFiles = {
 	scss: [
 		"!app/lib/**",
 		"!app/lib",
+		"!app/dist",
+		"!app/dist/**",
 		"app/**/*.scss",
 	],
 	html: [
@@ -96,7 +99,9 @@ gulp.task("transpile", function () {
 	};
 	
 	return gulp.src(srcFiles.js)
+		.pipe(sourcemaps.init())
 		.pipe(babel(babelOptions))
+		.pipe(sourcemaps.write())
 		.pipe(gulp.dest(destDir.js));
 	
 });
