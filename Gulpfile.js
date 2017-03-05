@@ -149,8 +149,6 @@ gulp.task("js-watch", function () {
 		
 		console.log(filepath + " is deleted. Deleting corresponding .js files from app/dist/js");
 		
-		console.log(filepath);
-		
 		let fullPath = filepath;
 		let rootToJS = "app/dist/js/";
 		let fileNameBase = path.basename(filepath, '.js');
@@ -160,15 +158,11 @@ gulp.task("js-watch", function () {
 		let fullPathArray = fullPath.split("/");
 		let index = 0;
 		
-		console.log(fullPathArray);
-		
 		for (let i = 0; i < fullPathArray.length; i++) {
 			
 			if (fullPathArray[i] === "app") {
 				
 				index = i;
-				
-				console.log(`index: ${index}, ${fullPathArray[i]}`);
 				
 				break;
 				
@@ -176,8 +170,6 @@ gulp.task("js-watch", function () {
 		}
 		
 		for (let i = index; i < fullPathArray.length - 1; i++) {
-			
-			console.log(i);
 			
 			if (i > index && i < fullPathArray.length - 1) {
 				
@@ -213,9 +205,7 @@ gulp.task('scss-watch', function(){
 	
 	watcher.on('unlink', function (filepath) {
 		
-		console.log(filepath + " is deleted. Deleting corresponding .css files from app/css");
-
-		console.log(filepath);
+		console.log(filepath + " is deleted. Deleting corresponding .css files from app/dist/css");
 
 		let fullPath = filepath;
 		let rootToCSS = "app/dist/css/";
@@ -225,26 +215,20 @@ gulp.task('scss-watch', function(){
 
 		let fullPathArray = fullPath.split("/");
 		let index = 0;
-
-		console.log(fullPathArray);
-
+		
 		for (let i = 0; i < fullPathArray.length; i++) {
 
 			if (fullPathArray[i] === "app") {
 
 				index = i;
-
-				console.log(`index: ${index}, ${fullPathArray[i]}`);
-
+				
 				break;
 
 			}
 		}
 
 		for (let i = index; i < fullPathArray.length - 1; i++) {
-
-			console.log(i);
-
+			
 			if (i > index && i < fullPathArray.length - 1) {
 
 				pathToCSS += fullPathArray[i] + "/";
@@ -266,7 +250,7 @@ gulp.task('scss-watch', function(){
 	
 	watcher.on('add', function (filepath) {
 		
-		console.log(filepath + " is added. Adding corresponding .css files to app/css");
+		console.log(filepath + " is added. Adding corresponding .css files to app/dist/css");
 
 		runSequence('sass', 'inject');
 		// reload();
