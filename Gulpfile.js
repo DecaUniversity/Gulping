@@ -23,6 +23,10 @@ const reload = browserSync.reload;
 
 const util = require("./utils.js");
 
+/******************************************************************************************
+ FILE PATHS
+ ******************************************************************************************/
+
 let srcFiles = {
 	
 	scss: [
@@ -66,30 +70,9 @@ let srcFiles = {
 		'app/dist/**/*controller.js',
 		'app/dist/**/*component.js',
 		'app/dist/**/**.js'
-	],
-	injectorAngularDocs: [
-		'docs/**/*.css',
-		'docs/app.js',
-		'docs/**/*module.js',
-		'docs/**/*constants.js',
-		'docs/**/*provider.js',
-		'docs/**/*enum.js',
-		'docs/**/*model.js',
-		'docs/**/*config.js',
-		'docs/**/*filter.js',
-		'docs/**/*directive.js',
-		'docs/**/*decorator.js',
-		'docs/**/*interceptor.js',
-		'docs/**/*service.js',
-		'docs/**/*workflow.js',
-		'docs/**/*repository.js',
-		'docs/**/*resolver.js',
-		'docs/**/*controller.js',
-		'docs/**/*component.js',
-		'docs/**/**.js'
 	]
-	
 };
+
 
 let destDir = {
 	
@@ -97,6 +80,68 @@ let destDir = {
 	js: "app/dist"
 	
 };
+
+/********************************************************************************
+ TASKS
+ ********************************************************************************/
+
+/********************************************************************************
+ Initialization Tasks
+ ********************************************************************************/
+
+/**
+ * Default task
+ */
+gulp.task("default", function() {
+	
+	util.printTask("default");
+	
+	runSequence('init');
+	
+});
+
+/**
+ * Initialization task
+ */
+gulp.task("init", function() {
+	
+	util.printTask("init");
+	
+	const cleaning = [
+		"clean:dist"
+	];
+	
+	const watching = [
+		'scss-watch',
+		'html-watch',
+		'js-watch'
+	];
+	
+	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', watching, "serve");
+	
+});
+
+
+/********************************************************************************
+ Cleaning Tasks
+ ********************************************************************************/
+
+/**
+ * Deletes the dist folder
+ */
+gulp.task("clean:dist", function () {
+	
+	util.printTask("clean:dist");
+	
+	return del([
+		"app/dist"
+	]);
+	
+});
+
+/********************************************************************************
+ Transforming Tasks
+ ********************************************************************************/
 
 /**
  * Compiles .scss to .css
@@ -113,14 +158,6 @@ gulp.task('sass', function() {
 		.pipe(sass().on("error", sass.logError))
 		.pipe(postcss(processors))
 		.pipe(gulp.dest(destDir.scss));
-	
-});
-
-gulp.task("eslint", function () {
-	
-	return gulp.src(srcFiles.js)
-		.pipe(eslint())
-		.pipe(eslint.format());
 	
 });
 
@@ -142,6 +179,60 @@ gulp.task("transpile", function () {
 		.pipe(gulp.dest(destDir.js));
 	
 });
+
+/********************************************************************************
+ Utility Tasks
+ ********************************************************************************/
+
+/**
+ * Uses eslint to provide warning about style problems or potential pitfalls
+ */
+gulp.task("eslint", function () {
+	
+	return gulp.src(srcFiles.js)
+		.pipe(eslint())
+		.pipe(eslint.format());
+	
+});
+
+/**
+ * Injects .scss files into index.html
+ */
+gulp.task('inject', function () {
+	
+	util.printTask("inject");
+	
+	let injectOptions = {
+		ignorePath: 'app/',
+		addRootSlash: false,
+		empty: true
+	};
+	
+	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
+	
+	return gulp.src('app/index.html')
+		.pipe(injector(injectSrc, injectOptions))
+		.pipe(gulp.dest('app'));
+});
+
+/**
+ * Serve application using browser-sync
+ */
+gulp.task("serve", function () {
+	
+	util.printTask("serve");
+	
+	browserSync.init({
+		server: {
+			baseDir: "app"
+		}
+	})
+	
+});
+
+/********************************************************************************
+ Watch Tasks
+ ********************************************************************************/
 
 /**
  * Watch js files and transpile them to ES5
@@ -304,135 +395,40 @@ gulp.task('html-watch', function () {
 	
 });
 
-/**
- * Injects .scss files into index.html
- */
-gulp.task('inject', function () {
-	
-	util.printTask("inject");
-	
-	let injectOptions = {
-		ignorePath: 'app/',
-		addRootSlash: false,
-		empty: true
-	};
-	
-	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
-	
-	return gulp.src('app/index.html')
-		.pipe(injector(injectSrc, injectOptions))
-		.pipe(gulp.dest('app'));
-});
 
-/**
- * For docs folder
- * Injects .scss files into index.html
- */
-gulp.task('inject:docs', function () {
-	
-	util.printTask("inject:docs");
-	
-	let injectOptions = {
-		ignorePath: 'docs/',
-		addRootSlash: false,
-		empty: true
-	};
-	
-	let injectSrc = gulp.src(srcFiles.injectorAngularDocs, {read: false});
-	
-	return gulp.src('docs/index.html')
-		.pipe(injector(injectSrc, injectOptions))
-		.pipe(gulp.dest('docs'));
-});
-
+/********************************************************************************
+ GitHub Pages Tasks
+ ********************************************************************************/
 
 
 /**
- * Serve application using browser-sync
+ * Delete the docs folder
  */
-gulp.task("serve", function () {
-	
-	util.printTask("serve");
-	
-	browserSync.init({
-		server: {
-			baseDir: "app"
-		}
-	})
-	
-});
-
-/**
- * Initialization task
- */
-gulp.task("init", function() {
-	
-	util.printTask("init");
-	
-	const cleaning = [
-		"clean:css",
-		"clean:js"
-	];
-	
-	const watching = [
-		'scss-watch',
-		'html-watch',
-		'js-watch'
-	];
-
-	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', watching, "serve");
-
-});
-
-/**
- * Deletes the dist folder
- */
-gulp.task("clean:css", function () {
-	
-	util.printTask("clean:css");
+gulp.task("clean:docs", function () {
 	
 	return del([
-		"app/dist"
+		"docs"
 	]);
 	
 });
 
 /**
- * Deletes the dist/js folder
+ * Copies dist content to docs: all of the compiles .scss and transpiled .js
  */
-
-gulp.task("clean:js", function () {
-	
-	util.printTask("clean:js");
-	
-	return del([
-		"app/dist"
-	]);
-	
-});
-
-/**
- * Default task
- */
-gulp.task("default", function() {
-	
-	util.printTask("default");
-
-	runSequence('init');
-
-});
-
 gulp.task("copy:dist:docs", function () {
 	
 	return gulp.src([
-		"app/dist/**/*"
-	], {
-		base: "app/dist"
-	})
+			"app/dist/**/*"
+		], {
+			base: "app/dist"
+		})
 		.pipe(gulp.dest("./docs"));
 	
 });
 
+/**
+ * Copies app content to docs: anything that didn't require transformation
+ */
 gulp.task("copy:others:docs", function () {
 	
 	return gulp.src([
@@ -447,14 +443,52 @@ gulp.task("copy:others:docs", function () {
 	
 });
 
-gulp.task("clean:docs", function () {
+/**
+ * For docs folder
+ * Injects .scss files into index.html
+ */
+gulp.task('inject:docs', function () {
 	
-	return del([
-		"docs"
-	]);
+	util.printTask("inject:docs");
 	
+	let injectorAngularDocs = [
+		'docs/**/*.css',
+		'docs/app.js',
+		'docs/**/*module.js',
+		'docs/**/*constants.js',
+		'docs/**/*provider.js',
+		'docs/**/*enum.js',
+		'docs/**/*model.js',
+		'docs/**/*config.js',
+		'docs/**/*filter.js',
+		'docs/**/*directive.js',
+		'docs/**/*decorator.js',
+		'docs/**/*interceptor.js',
+		'docs/**/*service.js',
+		'docs/**/*workflow.js',
+		'docs/**/*repository.js',
+		'docs/**/*resolver.js',
+		'docs/**/*controller.js',
+		'docs/**/*component.js',
+		'docs/**/**.js'
+		];
+	
+	let injectOptions = {
+		ignorePath: 'docs/',
+		addRootSlash: false,
+		empty: true
+	};
+	
+	let injectSrc = gulp.src(injectorAngularDocs, {read: false});
+	
+	return gulp.src('docs/index.html')
+		.pipe(injector(injectSrc, injectOptions))
+		.pipe(gulp.dest('docs'));
 });
 
+/**
+ * Builds docs folder needed for Github Pages deployment
+ */
 gulp.task("build:docs", function () {
 	
 	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs", "inject:docs");
