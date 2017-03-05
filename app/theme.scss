@@ -43,4 +43,27 @@ h1 {
 	
 	background: #E63C44;
 	
+	text-decoration: none;
+	border: 0;
+	
+	
+}
+
+#yeah {
+	
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	
+}
+
+#gulp-banner:hover * {
+	color: #E63C44;
+	fill: #E63C44;
+}
+
+#gulp-banner:hover {
+	background: white;
 }
