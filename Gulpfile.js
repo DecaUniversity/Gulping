@@ -9,6 +9,8 @@ const runSequence = require("run-sequence");
 const watch = require("gulp-watch");
 
 const sass = require("gulp-sass");
+const postcss = require("gulp-postcss");
+const autoprefixer = require("autoprefixer");
 const eslint = require("gulp-eslint");
 const babel = require("gulp-babel");
 
@@ -63,8 +65,13 @@ gulp.task('sass', function() {
 	
 	util.printTask("sass");
 	
+	let processors = [
+		autoprefixer
+	];
+	
 	return gulp.src(srcFiles.scss)
-		.pipe(sass())
+		.pipe(sass().on("error", sass.logError))
+		.pipe(postcss(processors))
 		.pipe(gulp.dest(destDir.scss));
 	
 });
