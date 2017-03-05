@@ -46,10 +46,26 @@ let srcFiles = {
 		"!app/dist/**",
 		"app/**/*.js"
 	],
-	all: [
-		"!app/lib",
-		"!app/lib/**",
-		"app/**/**.*"
+	injectorAngular: [
+		'app/dist/css/**/*.css',
+		'app/dist/js/app.js',
+		'app/dist/js/**/*module.js',
+		'app/dist/js/**/*constants.js',
+		'app/dist/js/**/*provider.js',
+		'app/dist/js/**/*enum.js',
+		'app/dist/js/**/*model.js',
+		'app/dist/js/**/*config.js',
+		'app/dist/js/**/*filter.js',
+		'app/dist/js/**/*directive.js',
+		'app/dist/js/**/*decorator.js',
+		'app/dist/js/**/*interceptor.js',
+		'app/dist/js/**/*service.js',
+		'app/dist/js/**/*workflow.js',
+		'app/dist/js/**/*repository.js',
+		'app/dist/js/**/*resolver.js',
+		'app/dist/js/**/*controller.js',
+		'app/dist/js/**/*component.js',
+		'app/dist/js/**/**.js'
 	]
 	
 };
@@ -296,11 +312,7 @@ gulp.task('inject', function () {
 		empty: true
 	};
 
-	let injectSrc = gulp.src([
-		"app/dist/css/**/*.css",
-		"app/dist/js/**/*.js"
-		], {read: false}
-	);
+	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
 
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
