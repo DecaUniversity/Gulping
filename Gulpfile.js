@@ -47,33 +47,33 @@ let srcFiles = {
 		"app/**/*.js"
 	],
 	injectorAngular: [
-		'app/dist/css/**/*.css',
-		'app/dist/js/app.js',
-		'app/dist/js/**/*module.js',
-		'app/dist/js/**/*constants.js',
-		'app/dist/js/**/*provider.js',
-		'app/dist/js/**/*enum.js',
-		'app/dist/js/**/*model.js',
-		'app/dist/js/**/*config.js',
-		'app/dist/js/**/*filter.js',
-		'app/dist/js/**/*directive.js',
-		'app/dist/js/**/*decorator.js',
-		'app/dist/js/**/*interceptor.js',
-		'app/dist/js/**/*service.js',
-		'app/dist/js/**/*workflow.js',
-		'app/dist/js/**/*repository.js',
-		'app/dist/js/**/*resolver.js',
-		'app/dist/js/**/*controller.js',
-		'app/dist/js/**/*component.js',
-		'app/dist/js/**/**.js'
+		'app/dist/**/*.css',
+		'app/dist/app.js',
+		'app/dist/**/*module.js',
+		'app/dist/**/*constants.js',
+		'app/dist/**/*provider.js',
+		'app/dist/**/*enum.js',
+		'app/dist/**/*model.js',
+		'app/dist/**/*config.js',
+		'app/dist/**/*filter.js',
+		'app/dist/**/*directive.js',
+		'app/dist/**/*decorator.js',
+		'app/dist/**/*interceptor.js',
+		'app/dist/**/*service.js',
+		'app/dist/**/*workflow.js',
+		'app/dist/**/*repository.js',
+		'app/dist/**/*resolver.js',
+		'app/dist/**/*controller.js',
+		'app/dist/**/*component.js',
+		'app/dist/**/**.js'
 	]
 	
 };
 
 let destDir = {
 	
-	scss: "app/dist/css",
-	js: "app/dist/js"
+	scss: "app/dist",
+	js: "app/dist"
 	
 };
 
@@ -147,10 +147,10 @@ gulp.task("js-watch", function () {
 	
 	watcher.on('unlink', function (filepath) {
 		
-		console.log(filepath + " is deleted. Deleting corresponding .js files from app/dist/js");
+		console.log(filepath + " is deleted. Deleting corresponding .js files from app/dist");
 		
 		let fullPath = filepath;
-		let rootToJS = "app/dist/js/";
+		let rootToJS = "app/dist/";
 		let fileNameBase = path.basename(filepath, '.js');
 		let pathToJS = "";
 		let fullPathToJS = "";
@@ -205,10 +205,10 @@ gulp.task('scss-watch', function(){
 	
 	watcher.on('unlink', function (filepath) {
 		
-		console.log(filepath + " is deleted. Deleting corresponding .css files from app/dist/css");
+		console.log(filepath + " is deleted. Deleting corresponding .css files from app/dist");
 
 		let fullPath = filepath;
-		let rootToCSS = "app/dist/css/";
+		let rootToCSS = "app/dist/";
 		let fileNameBase = path.basename(filepath, '.scss');
 		let pathToCSS = "";
 		let fullPathToCSS = "";
@@ -250,7 +250,7 @@ gulp.task('scss-watch', function(){
 	
 	watcher.on('add', function (filepath) {
 		
-		console.log(filepath + " is added. Adding corresponding .css files to app/dist/css");
+		console.log(filepath + " is added. Adding corresponding .css files to app/dist");
 
 		runSequence('sass', 'inject');
 		// reload();
@@ -342,14 +342,14 @@ gulp.task("init", function() {
 });
 
 /**
- * Deletes the dist/css folder
+ * Deletes the dist folder
  */
 gulp.task("clean:css", function () {
 	
 	util.printTask("clean:css");
 	
 	return del([
-		"app/dist/css"
+		"app/dist"
 	]);
 	
 });
@@ -363,7 +363,7 @@ gulp.task("clean:js", function () {
 	util.printTask("clean:js");
 	
 	return del([
-		"app/dist/js"
+		"app/dist"
 	]);
 	
 });
@@ -377,6 +377,45 @@ gulp.task("default", function() {
 
 	runSequence('init');
 
+});
+
+gulp.task("copy:dist:docs", function () {
+	
+	return gulp.src([
+		"app/dist/**/*"
+	], {
+		base: "app/dist"
+	})
+		.pipe(gulp.dest("./docs"));
+	
+});
+
+gulp.task("copy:others:docs", function () {
+	
+	return gulp.src([
+			"!app/dist/**/*",
+			"!app/**/*.js",
+			"!app/**/*.scss",
+			"app/**/*"
+		], {
+			base: "app"
+		})
+		.pipe(gulp.dest("docs"));
+	
+});
+
+gulp.task("clean:docs", function () {
+	
+	return del([
+		"docs"
+	]);
+	
+});
+
+gulp.task("build:docs", function () {
+	
+	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs");
+	
 });
 
 
