@@ -1,0 +1,12 @@
+{
+  "name": "gulping",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+	"DecaHub"
+  ],
+  "license": "SEE LICENSE IN license.md",
+  "private": true,
+  "version": "1.0.0",
+  "author": "DecaHub"
+}

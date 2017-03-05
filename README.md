@@ -20,11 +20,11 @@ If you prefer to use `npm`, please modify the `package.json` file `script` prope
 
 From:
 
-`"start": "yarn && gulp"`
+`"start": "yarn && bower install && gulp"`
 
 to:
 
-`"start": "npm install && gulp"`
+`"start": "npm install && bower install && gulp"`
 
 and then run:
 

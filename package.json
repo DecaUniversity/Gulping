@@ -30,6 +30,6 @@
     "wiredep": "^4.0.0"
   },
   "scripts": {
-    "start": "yarn && gulp"
+    "start": "yarn && bower install && gulp"
   }
 }
