@@ -127,7 +127,7 @@ gulp.task("init", function() {
 		'lib-watch'
 	];
 	
-	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', watching, "serve");
+	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', 'inject:lib', watching, "serve");
 	
 });
 
