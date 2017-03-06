@@ -114,7 +114,8 @@ gulp.task("init", function() {
 	const watching = [
 		'scss-watch',
 		'html-watch',
-		'js-watch'
+		'js-watch',
+		'lib-watch'
 	];
 	
 	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', watching, "serve");
@@ -202,13 +203,6 @@ gulp.task('inject', function () {
 	
 	util.printTask("inject");
 	
-	let wiredep = require("wiredep").stream;
-	
-	let wiredepOptions = {
-		bowerJson: require('./bower.json'),
-		directory: "app/lib"
-	};
-	
 	let injectOptions = {
 		ignorePath: 'app/',
 		addRootSlash: false,
@@ -218,9 +212,31 @@ gulp.task('inject', function () {
 	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
 	
 	return gulp.src('app/index.html')
-		.pipe(wiredep(wiredepOptions))
 		.pipe(injector(injectSrc, injectOptions))
 		.pipe(gulp.dest('app'));
+});
+
+gulp.task("wiredep:lib", function () {
+	
+	util.printTask("wiredep:lib");
+	
+	let wiredep = require("wiredep").stream;
+	
+	/**
+	 * Ensure that the your dependencies are not saved as devDependencies;
+	 * otherwise, wiredep won't able to to see them unless you need to set
+	 * the following option:
+	 *  devDependencies: true, // default: false
+	 */
+	let wiredepOptions = {
+		bowerJson: require('./bower.json'),
+		directory: "app/lib"
+	};
+	
+	return gulp.src('app/index.html')
+		.pipe(wiredep(wiredepOptions))
+		.pipe(gulp.dest('app'));
+	
 });
 
 /**
@@ -403,6 +419,40 @@ gulp.task('html-watch', function () {
 	
 });
 
+gulp.task("lib-watch", function () {
+	
+	util.printTask("lib-watch");
+	
+	let watcher = watch("app/lib/**/*",
+		{
+			name: 'librarian',
+			verbose: true,
+			read: false
+		});
+	
+	watcher.on('change', function (filepath) {
+		
+		console.log(`lib change: ${filepath}`);
+		runSequence('wiredep:lib');
+		
+	});
+	
+	watcher.on('add', function (filepath) {
+		
+		console.log(`lib added: ${filepath}`);
+		runSequence('wiredep:lib');
+		
+	});
+	
+	watcher.on('unlink', function (filepath) {
+		
+		console.log(`lib deleted: ${filepath}`);
+		runSequence('wiredep:lib');
+		
+	});
+	
+});
+
 
 /********************************************************************************
  GitHub Pages Tasks
@@ -476,6 +526,12 @@ gulp.task('inject:docs', function () {
 	
 	let wiredep = require("wiredep").stream;
 	
+	/**
+	 * Ensure that the your dependencies are not saved as devDependencies;
+	 * otherwise, wiredep won't able to to see them unless you need to set
+	 * the following option:
+	 *  devDependencies: true, // default: false
+	 */
 	let wiredepOptions = {
 		bowerJson: require('./bower.json'),
 		directory: "docs/lib"

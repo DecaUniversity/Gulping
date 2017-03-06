@@ -3,10 +3,13 @@
   "description": "",
   "main": "app.js",
   "authors": [
-	"DecaHub"
+    "DecaHub"
   ],
   "license": "SEE LICENSE IN license.md",
   "private": true,
   "version": "1.0.0",
-  "author": "DecaHub"
+  "author": "DecaHub",
+  "dependencies": {
+    "angular": "^1.6.2"
+  }
 }
