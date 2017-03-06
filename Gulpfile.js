@@ -427,12 +427,27 @@ gulp.task("copy:dist:docs", function () {
 });
 
 /**
+ * Copies lib content to docs
+ */
+gulp.task("copy:lib:docs", function () {
+	
+	return gulp.src([
+			"app/lib/**/*"
+		], {
+			base: "app/dist"
+		})
+		.pipe(gulp.dest("./docs"));
+	
+});
+
+/**
  * Copies app content to docs: anything that didn't require transformation
  */
 gulp.task("copy:others:docs", function () {
 	
 	return gulp.src([
 			"!app/dist/**/*",
+			"!app/lib/**/*",
 			"!app/**/*.js",
 			"!app/**/*.scss",
 			"app/**/*"
