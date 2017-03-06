@@ -508,15 +508,15 @@ gulp.task("copy:lib:docs", function () {
 gulp.task("copy:others:docs", function () {
 	
 	return gulp.src([
-			"!app/dist/**/*",
-			"!app/lib/**/*",
+			"app/**",
+			"!app/dist",
+			"!app/dist/**",
+			"!app/lib",
+			"!app/lib/**",
 			"!app/**/*.js",
-			"!app/**/*.scss",
-			"app/**/*"
-		], {
-			base: "app"
-		})
-		.pipe(gulp.dest("docs"));
+			"!app/**/*.scss"
+		], { base: "app" })
+		.pipe(gulp.dest("docs"))
 	
 });
 
