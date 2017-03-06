@@ -202,6 +202,13 @@ gulp.task('inject', function () {
 	
 	util.printTask("inject");
 	
+	let wiredep = require("wiredep").stream;
+	
+	let wiredepOptions = {
+		bowerJson: require('./bower.json'),
+		directory: "app/lib"
+	};
+	
 	let injectOptions = {
 		ignorePath: 'app/',
 		addRootSlash: false,
@@ -211,6 +218,7 @@ gulp.task('inject', function () {
 	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
 	
 	return gulp.src('app/index.html')
+		.pipe(wiredep(wiredepOptions))
 		.pipe(injector(injectSrc, injectOptions))
 		.pipe(gulp.dest('app'));
 });
@@ -466,6 +474,13 @@ gulp.task('inject:docs', function () {
 	
 	util.printTask("inject:docs");
 	
+	let wiredep = require("wiredep").stream;
+	
+	let wiredepOptions = {
+		bowerJson: require('./bower.json'),
+		directory: "docs/lib"
+	};
+	
 	let injectorAngularDocs = [
 		'docs/**/*.css',
 		'docs/app.js',
@@ -497,6 +512,7 @@ gulp.task('inject:docs', function () {
 	let injectSrc = gulp.src(injectorAngularDocs, {read: false});
 	
 	return gulp.src('docs/index.html')
+		.pipe(wiredep(wiredepOptions))
 		.pipe(injector(injectSrc, injectOptions))
 		.pipe(gulp.dest('docs'));
 });
