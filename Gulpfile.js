@@ -16,12 +16,21 @@ const babel = require("gulp-babel");
 const sourcemaps = require("gulp-sourcemaps");
 
 const injector = require('gulp-inject');
+const mainBowerFiles = require("main-bower-files");
 
 const browserSync = require("browser-sync");
 const reload = browserSync.reload;
 
 
 const util = require("./utils.js");
+
+
+/**
+ * Fix for warning when running watchers on lib
+ * Warning: Possible EventEmitter memory leak detected.
+ */
+
+require('events').EventEmitter.prototype._maxListeners = 999;
 
 /******************************************************************************************
  FILE PATHS
@@ -216,26 +225,24 @@ gulp.task('inject', function () {
 		.pipe(gulp.dest('app'));
 });
 
-gulp.task("wiredep:lib", function () {
+gulp.task("inject:lib", function () {
 	
-	util.printTask("wiredep:lib");
-	
-	let wiredep = require("wiredep").stream;
+	util.printTask("inject:lib");
 	
 	/**
-	 * Ensure that the your dependencies are not saved as devDependencies;
-	 * otherwise, wiredep won't able to to see them unless you need to set
-	 * the following option:
-	 *  devDependencies: true, // default: false
+	 * devDependencies won't be injected into
 	 */
-	let wiredepOptions = {
-		bowerJson: require('./bower.json'),
-		directory: "app/lib"
+	
+	let injectOptions = {
+		name: "bower",
+		ignorePath: 'app/',
+		addRootSlash: false,
+		empty: true
 	};
 	
-	return gulp.src('app/index.html')
-		.pipe(wiredep(wiredepOptions))
-		.pipe(gulp.dest('app'));
+	return gulp.src("app/index.html")
+		.pipe(injector(gulp.src(mainBowerFiles(), {read: false}), injectOptions))
+		.pipe(gulp.dest("app"));
 	
 });
 
@@ -423,33 +430,30 @@ gulp.task("lib-watch", function () {
 	
 	util.printTask("lib-watch");
 	
-	let watcher = watch("app/lib/**/*",
+	let watcher = watch([
+		"bower.json"
+	],
 		{
 			name: 'librarian',
 			verbose: true,
-			read: false
+			read: false,
+			awaitWriteFinish: true
 		});
 	
-	watcher.on('change', function (filepath) {
-		
-		console.log(`lib change: ${filepath}`);
-		runSequence('wiredep:lib');
-		
-	});
-	
 	watcher.on('add', function (filepath) {
-		
+
 		console.log(`lib added: ${filepath}`);
-		runSequence('wiredep:lib');
-		
+		runSequence('inject:lib');
+
 	});
-	
-	watcher.on('unlink', function (filepath) {
-		
-		console.log(`lib deleted: ${filepath}`);
-		runSequence('wiredep:lib');
-		
+
+	watcher.on('change', function (filepath) {
+
+		console.log(`lib changed: ${filepath}`);
+		runSequence('inject:lib');
+
 	});
+
 	
 });
 
@@ -492,7 +496,7 @@ gulp.task("copy:lib:docs", function () {
 	return gulp.src([
 			"app/lib/**/*"
 		], {
-			base: "app/dist"
+			base: "app"
 		})
 		.pipe(gulp.dest("./docs"));
 	
@@ -523,19 +527,6 @@ gulp.task("copy:others:docs", function () {
 gulp.task('inject:docs', function () {
 	
 	util.printTask("inject:docs");
-	
-	let wiredep = require("wiredep").stream;
-	
-	/**
-	 * Ensure that the your dependencies are not saved as devDependencies;
-	 * otherwise, wiredep won't able to to see them unless you need to set
-	 * the following option:
-	 *  devDependencies: true, // default: false
-	 */
-	let wiredepOptions = {
-		bowerJson: require('./bower.json'),
-		directory: "docs/lib"
-	};
 	
 	let injectorAngularDocs = [
 		'docs/**/*.css',
@@ -568,7 +559,6 @@ gulp.task('inject:docs', function () {
 	let injectSrc = gulp.src(injectorAngularDocs, {read: false});
 	
 	return gulp.src('docs/index.html')
-		.pipe(wiredep(wiredepOptions))
 		.pipe(injector(injectSrc, injectOptions))
 		.pipe(gulp.dest('docs'));
 });
@@ -578,7 +568,7 @@ gulp.task('inject:docs', function () {
  */
 gulp.task("build:docs", function () {
 	
-	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs", "inject:docs");
+	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs", "copy:lib:docs", "inject:docs");
 	
 });
 
