@@ -68,7 +68,9 @@ For any new .js file that you create, please ensure that you follow the followin
 
 ### CAUTION: RIPTIDE
 
-When adding or removing dependencies with bower, it is critical that you use the --save tag along with install or uninstall. Otherwise, the `inject:lib` task won't get triggered and index.html won’t be updated. You would not want to just remove the files from the `lib` folder but leave their declaration as dependencies in `bower.json`; otherwise, the next time that you run `bower install` those undesired packages will be installed – adding unnecessary bulk to the project. 
+* When adding or removing dependencies with bower, it is critical that you use the --save tag along with install or uninstall. Otherwise, the `inject:lib` task won't get triggered and index.html won’t be updated. You would not want to just remove the files from the `lib` folder but leave their declaration as dependencies in `bower.json`; otherwise, the next time that you run `bower install` those undesired packages will be installed – adding unnecessary bulk to the project. 
+
+* It is critical to always start the project using `yarn start` instead of `gulp`; otherwise, you won't be able to inject dependencies already added to the `lib` folder. After the project is running, feel free to use any `gulp` task independently.
 
 
 ### Building for GitHub Pages:
