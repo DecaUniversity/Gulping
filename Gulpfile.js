@@ -529,6 +529,7 @@ gulp.task('inject:docs', function () {
 	util.printTask("inject:docs");
 	
 	let injectorAngularDocs = [
+		'!docs/lib/**/*.*',
 		'docs/**/*.css',
 		'docs/app.js',
 		'docs/**/*module.js',
