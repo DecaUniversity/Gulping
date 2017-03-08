@@ -23,6 +23,7 @@ const reload = browserSync.reload;
 
 const ngFinder = require("ngfinder");
 
+const gutil = require("gulp-util");
 const util = require("./utils.js");
 
 /**
@@ -31,6 +32,24 @@ const util = require("./utils.js");
  */
 
 require('events').EventEmitter.prototype._maxListeners = 999;
+
+/**
+ * Handles error messages in gulp tasks and prints a pretty message.
+ * @param err Error thown by the pipe / task.
+ */
+let errorHandler = function (err) {
+	
+	const plugin = err.plugin || "Unknown";
+	const message = err.message || "Unknown Error";
+	const codeFrame = err.codeFrame || null;
+	
+	gutil.log(gutil.colors.bgRed.bold(`Build Error in ${plugin}`));
+	gutil.log(gutil.colors.bgRed.bold(`${message}`));
+	
+	if (codeFrame) {
+		gutil.log(`${codeFrame}`)
+	}
+};
 
 /******************************************************************************************
  FILE PATHS
@@ -179,7 +198,12 @@ gulp.task("transpile", function () {
 	
 	return gulp.src(srcFiles.js)
 		.pipe(sourcemaps.init())
-		.pipe(babel(babelOptions))
+		.pipe(babel(babelOptions).on("error", function (err) {
+			
+			errorHandler(err);
+			this.emit('end');
+			
+		}))
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest(destDir.js));
 	
