@@ -21,9 +21,9 @@ const mainBowerFiles = require("main-bower-files");
 const browserSync = require("browser-sync");
 const reload = browserSync.reload;
 
+const ngFinder = require("ngfinder");
 
 const util = require("./utils.js");
-
 
 /**
  * Fix for warning when running watchers on lib
@@ -59,29 +59,22 @@ let srcFiles = {
 		"!app/dist/**",
 		"app/**/*.js"
 	],
-	injectorAngular: [
-		'app/dist/**/*.css',
-		'app/dist/app.js',
-		'app/dist/**/*module.js',
-		'app/dist/**/*constants.js',
-		'app/dist/**/*provider.js',
-		'app/dist/**/*enum.js',
-		'app/dist/**/*model.js',
-		'app/dist/**/*config.js',
-		'app/dist/**/*filter.js',
-		'app/dist/**/*directive.js',
-		'app/dist/**/*decorator.js',
-		'app/dist/**/*interceptor.js',
-		'app/dist/**/*service.js',
-		'app/dist/**/*workflow.js',
-		'app/dist/**/*repository.js',
-		'app/dist/**/*resolver.js',
-		'app/dist/**/*controller.js',
-		'app/dist/**/*component.js',
-		'app/dist/**/**.js'
-	]
+	injectorAngular: []
+	
 };
 
+const getAngularSrc = function () {
+	
+	return srcFiles.injectorAngular;
+	
+};
+
+const setAngularSrc = function () {
+	
+	srcFiles.injectorAngular = ngFinder();
+	srcFiles.injectorAngular.unshift("app/dist/**/*.css");
+	
+};
 
 let destDir = {
 	
@@ -89,6 +82,8 @@ let destDir = {
 	js: "app/dist"
 	
 };
+
+setAngularSrc();
 
 /********************************************************************************
  TASKS
@@ -218,14 +213,34 @@ gulp.task('inject', function () {
 		empty: true
 	};
 	
-	let injectSrc = gulp.src(srcFiles.injectorAngular, {read: false});
+	let injectSrc = gulp.src(getAngularSrc(), {read: false});
 	
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
 		.pipe(gulp.dest('app'));
 });
 
-gulp.task("inject:lib", function () {
+gulp.task('inject:add-remove-file', function () {
+	
+	util.printTask("inject:add-remove-file");
+	
+	let injectOptions = {
+		ignorePath: 'app/',
+		addRootSlash: false,
+		empty: true
+	};
+	
+	setAngularSrc();
+	
+	let injectSrc = gulp.src(getAngularSrc(), {read: false});
+	
+	return gulp.src('app/index.html')
+		.pipe(injector(injectSrc, injectOptions))
+		.pipe(gulp.dest('app'));
+});
+
+
+gulp.task('inject:lib', function () {
 	
 	util.printTask("inject:lib");
 	
@@ -284,7 +299,7 @@ gulp.task("js-watch", function () {
 	
 	watcher.on("add", function (filepath) {
 		
-		runSequence('eslint', 'transpile', 'inject');
+		runSequence('eslint', 'transpile', 'inject:add-remove-file');
 		
 	});
 	
@@ -327,7 +342,7 @@ gulp.task("js-watch", function () {
 		del(fullPathToJS)
 			.then(function(paths){
 				console.log("deleted files: " + paths.join('\n'));
-				runSequence('inject');
+				runSequence('inject:add-remove-file');
 				// reload();
 			});
 		
@@ -341,47 +356,47 @@ gulp.task("js-watch", function () {
  */
 
 gulp.task('scss-watch', function(){
-
+	
 	util.printTask("scss-watch");
-
+	
 	let watcher = watch(srcFiles.scss);
 	
 	watcher.on('unlink', function (filepath) {
 		
 		console.log(filepath + " is deleted. Deleting corresponding .css files from app/dist");
-
+		
 		let fullPath = filepath;
 		let rootToCSS = "app/dist/";
 		let fileNameBase = path.basename(filepath, '.scss');
 		let pathToCSS = "";
 		let fullPathToCSS = "";
-
+		
 		let fullPathArray = fullPath.split("/");
 		let index = 0;
 		
 		for (let i = 0; i < fullPathArray.length; i++) {
-
+			
 			if (fullPathArray[i] === "app") {
-
+				
 				index = i;
 				
 				break;
-
+				
 			}
 		}
-
+		
 		for (let i = index; i < fullPathArray.length - 1; i++) {
 			
 			if (i > index && i < fullPathArray.length - 1) {
-
+				
 				pathToCSS += fullPathArray[i] + "/";
-
+				
 			}
-
+			
 		}
-
+		
 		fullPathToCSS = rootToCSS + pathToCSS + fileNameBase + ".*";
-
+		
 		del(fullPathToCSS)
 			.then(function(paths){
 				console.log("deleted files: " + paths.join('\n'));
@@ -394,7 +409,7 @@ gulp.task('scss-watch', function(){
 	watcher.on('add', function (filepath) {
 		
 		console.log(filepath + " is added. Adding corresponding .css files to app/dist");
-
+		
 		runSequence('sass', 'inject');
 		// reload();
 		
@@ -404,7 +419,7 @@ gulp.task('scss-watch', function(){
 	watcher.on('change', function (filepath) {
 		
 		console.log(filepath + " changed. Sassing it and injecting it");
-
+		
 		runSequence('sass', 'inject');
 		// reload();
 		
@@ -431,8 +446,8 @@ gulp.task("lib-watch", function () {
 	util.printTask("lib-watch");
 	
 	let watcher = watch([
-		"bower.json"
-	],
+			"bower.json"
+		],
 		{
 			name: 'librarian',
 			verbose: true,
@@ -441,19 +456,19 @@ gulp.task("lib-watch", function () {
 		});
 	
 	watcher.on('add', function (filepath) {
-
+		
 		console.log(`lib added: ${filepath}`);
 		runSequence('inject:lib');
-
+		
 	});
-
+	
 	watcher.on('change', function (filepath) {
-
+		
 		console.log(`lib changed: ${filepath}`);
 		runSequence('inject:lib');
-
+		
 	});
-
+	
 	
 });
 
@@ -531,7 +546,7 @@ gulp.task('inject:docs', function () {
 	let injectorAngularDocs = [
 		'!docs/lib/**/*.*',
 		'docs/**/*.css',
-		'docs/app.js',
+		'docs/main.app.js',
 		'docs/**/*module.js',
 		'docs/**/*constants.js',
 		'docs/**/*provider.js',
@@ -549,7 +564,7 @@ gulp.task('inject:docs', function () {
 		'docs/**/*controller.js',
 		'docs/**/*component.js',
 		'docs/**/**.js'
-		];
+	];
 	
 	let injectOptions = {
 		ignorePath: 'docs/',
@@ -572,6 +587,3 @@ gulp.task("build:docs", function () {
 	runSequence("clean:docs", "copy:dist:docs", "copy:others:docs", "copy:lib:docs", "inject:docs");
 	
 });
-
-
-
