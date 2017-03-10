@@ -24,7 +24,10 @@ const reload = browserSync.reload;
 const ngFinder = require("ngfinder");
 
 const gutil = require("gulp-util");
+const log = require("bootstrap-logs");
 const util = require("./utils.js");
+
+const ngection = require("./index");
 
 /**
  * Fix for warning when running watchers on lib
@@ -43,11 +46,11 @@ let errorHandler = function (err) {
 	const message = err.message || "Unknown Error";
 	const codeFrame = err.codeFrame || null;
 	
-	gutil.log(gutil.colors.bgRed.bold(`Build Error in ${plugin}`));
-	gutil.log(gutil.colors.bgRed.bold(`${message}`));
+	log.danger(`Build Error in ${plugin}`);
+	log.danger(`${message}`);
 	
 	if (codeFrame) {
-		gutil.log(`${codeFrame}`)
+		log.danger(`${codeFrame}`);
 	}
 };
 
@@ -82,27 +85,12 @@ let srcFiles = {
 	
 };
 
-const getAngularSrc = function () {
-	
-	return srcFiles.injectorAngular;
-	
-};
-
-const setAngularSrc = function () {
-	
-	srcFiles.injectorAngular = ngFinder();
-	srcFiles.injectorAngular.unshift("app/dist/**/*.css");
-	
-};
-
 let destDir = {
 	
 	scss: "app/dist",
 	js: "app/dist"
 	
 };
-
-setAngularSrc();
 
 /********************************************************************************
  TASKS
@@ -129,6 +117,8 @@ gulp.task("default", function() {
 gulp.task("init", function() {
 	
 	util.printTask("init");
+	
+	ngection.set();
 	
 	const cleaning = [
 		"clean:dist"
@@ -237,7 +227,7 @@ gulp.task('inject', function () {
 		empty: true
 	};
 	
-	let injectSrc = gulp.src(getAngularSrc(), {read: false});
+	let injectSrc = gulp.src(ngection.get(), {read: false});
 	
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
@@ -254,9 +244,7 @@ gulp.task('inject:add-remove-file', function () {
 		empty: true
 	};
 	
-	setAngularSrc();
-	
-	let injectSrc = gulp.src(getAngularSrc(), {read: false});
+	let injectSrc = gulp.src(ngection.refresh(), {read: false});
 	
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
