@@ -3,6 +3,6 @@
 
 (function () {
 	
-	console.log("Hello");
+	console.log("LOL");
 	
 }());
