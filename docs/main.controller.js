@@ -1,0 +1,12 @@
+/**
+ * Created by DecaHub on 3/4/17.
+ */
+
+"use strict";
+
+angular.module("main").controller("MainController", ["$scope", function ($scope) {
+
+	// Body of MainController
+
+}]);
+//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4uY29udHJvbGxlci5qcyJdLCJuYW1lcyI6WyJhbmd1bGFyIiwibW9kdWxlIiwiY29udHJvbGxlciIsIiRzY29wZSJdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7QUFJQTs7QUFFQUEsUUFBUUMsTUFBUixDQUFlLE1BQWYsRUFDRUMsVUFERixDQUNhLGdCQURiLEVBQytCLENBQUMsUUFBRCxFQUFXLFVBQVVDLE1BQVYsRUFBa0I7O0FBRTFEOztBQUVBLENBSjZCLENBRC9CIiwiZmlsZSI6Im1haW4uY29udHJvbGxlci5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQ3JlYXRlZCBieSBEZWNhSHViIG9uIDMvNC8xNy5cbiAqL1xuXG5cInVzZSBzdHJpY3RcIjtcblxuYW5ndWxhci5tb2R1bGUoXCJtYWluXCIpXG5cdC5jb250cm9sbGVyKFwiTWFpbkNvbnRyb2xsZXJcIiwgW1wiJHNjb3BlXCIsIGZ1bmN0aW9uICgkc2NvcGUpIHtcblx0XHRcblx0XHQvLyBCb2R5IG9mIE1haW5Db250cm9sbGVyXG5cdFx0XG5cdH1dKTtcbiJdfQ==
