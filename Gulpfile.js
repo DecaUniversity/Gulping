@@ -455,6 +455,18 @@ gulp.task('html-watch', function () {
 		
 		reload();
 		
+	});
+	
+	watcher.on('add', function (filepath) {
+		
+		reload();
+		
+	});
+	
+	watcher.on('unlink', function (filepath) {
+		
+		reload();
+		
 	})
 	
 });
