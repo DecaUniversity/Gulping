@@ -649,7 +649,7 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-bootstrap-logs@^1.0.2:
+bootstrap-logs@^1.0.0, bootstrap-logs@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/bootstrap-logs/-/bootstrap-logs-1.0.2.tgz#bd085987eb5136926913e7bbd10273fbdb0fbc9f"
   dependencies:
@@ -2855,13 +2855,25 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-ngfinder@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ngfinder/-/ngfinder-2.0.1.tgz#77e250ca2a3c2f558993a0c3c0cffcfceea1ba19"
-
-ngsource@^1.0.0:
+ngfinder@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ngsource/-/ngsource-1.0.0.tgz#a1cf33f052394616d2d57d24a94639be94c05439"
+  resolved "https://registry.yarnpkg.com/ngfinder/-/ngfinder-1.0.0.tgz#481363425f85beea91f27a7a7d4879d684d8e2ed"
+
+ngfinder@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ngfinder/-/ngfinder-2.0.2.tgz#434b4c4366a2640b5ac007e0caf66a9f5813e14f"
+  dependencies:
+    bootstrap-logs "^1.0.0"
+    chalk "^1.1.3"
+    is "^3.2.1"
+
+ngsource@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ngsource/-/ngsource-1.0.1.tgz#ab6e4bf87b323633e2f8b3ce0760d4a12575a1e8"
+  dependencies:
+    bootstrap-logs "^1.0.2"
+    is "^3.2.1"
+    ngfinder "^1.0.0"
 
 node-gyp@^3.3.1:
   version "3.5.0"
