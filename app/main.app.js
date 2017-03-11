@@ -1,8 +1,3 @@
 "use strict";
 
-
-(function () {
-	
-	console.log("LOL");
-	
-}());
+angular.module("main", []);
