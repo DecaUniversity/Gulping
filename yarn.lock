@@ -2346,6 +2346,10 @@ is-windows@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-0.2.0.tgz#de1aa6d63ea29dd248737b69f1ff8b8002d2108c"
 
+is@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/is/-/is-3.2.1.tgz#d0ac2ad55eb7b0bec926a5266f6c662aaa83dca5"
+
 isarray@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-0.0.1.tgz#8a18acfca9a8f4177e09abfc6038939b05d1eedf"
@@ -2851,9 +2855,13 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-ngfinder@^1.0.0:
+ngfinder@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/ngfinder/-/ngfinder-2.0.1.tgz#77e250ca2a3c2f558993a0c3c0cffcfceea1ba19"
+
+ngsource@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ngfinder/-/ngfinder-1.0.0.tgz#481363425f85beea91f27a7a7d4879d684d8e2ed"
+  resolved "https://registry.yarnpkg.com/ngsource/-/ngsource-1.0.0.tgz#a1cf33f052394616d2d57d24a94639be94c05439"
 
 node-gyp@^3.3.1:
   version "3.5.0"
