@@ -17,17 +17,14 @@ const sourcemaps = require("gulp-sourcemaps");
 
 const injector = require('gulp-inject');
 const mainBowerFiles = require("main-bower-files");
+const ngsource = require("ngsource");
 
 const browserSync = require("browser-sync");
 const reload = browserSync.reload;
 
-const ngFinder = require("ngfinder");
-
-const gutil = require("gulp-util");
 const log = require("bootstrap-logs");
-const util = require("./utils.js");
 
-const ngection = require("./index");
+const util = require("./utils.js");
 
 /**
  * Fix for warning when running watchers on lib
@@ -118,7 +115,16 @@ gulp.task("init", function() {
 	
 	util.printTask("init");
 	
-	ngection.set();
+	try {
+		
+		ngsource.set({target: "app/dist"}, ["app/dist/**/*.css"]);
+		
+	} catch (error) {
+		
+		log.danger(error.stack);
+		return;
+		
+	}
 	
 	const cleaning = [
 		"clean:dist"
@@ -227,7 +233,7 @@ gulp.task('inject', function () {
 		empty: true
 	};
 	
-	let injectSrc = gulp.src(ngection.get(), {read: false});
+	let injectSrc = gulp.src(ngsource.get(), {read: false});
 	
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
@@ -244,7 +250,7 @@ gulp.task('inject:add-remove-file', function () {
 		empty: true
 	};
 	
-	let injectSrc = gulp.src(ngection.refresh(), {read: false});
+	let injectSrc = gulp.src(ngsource.refresh(), {read: false});
 	
 	return gulp.src('app/index.html')
 		.pipe(injector(injectSrc, injectOptions))
