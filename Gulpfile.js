@@ -561,36 +561,29 @@ gulp.task('inject:docs', function () {
 	
 	util.printTask("inject:docs");
 	
-	let injectorAngularDocs = [
-		'!docs/lib/**/*.*',
-		'docs/**/*.css',
-		'docs/main.app.js',
-		'docs/**/*module.js',
-		'docs/**/*constants.js',
-		'docs/**/*provider.js',
-		'docs/**/*enum.js',
-		'docs/**/*model.js',
-		'docs/**/*config.js',
-		'docs/**/*filter.js',
-		'docs/**/*directive.js',
-		'docs/**/*decorator.js',
-		'docs/**/*interceptor.js',
-		'docs/**/*service.js',
-		'docs/**/*workflow.js',
-		'docs/**/*repository.js',
-		'docs/**/*resolver.js',
-		'docs/**/*controller.js',
-		'docs/**/*component.js',
-		'docs/**/**.js'
-	];
-	
 	let injectOptions = {
 		ignorePath: 'docs/',
 		addRootSlash: false,
 		empty: true
 	};
 	
-	let injectSrc = gulp.src(injectorAngularDocs, {read: false});
+	try {
+		
+		ngsource.set({
+			target: "docs",
+			ignore: "docs/lib"
+		}, [
+			"docs/**/*.css"
+		]);
+		
+	} catch (error) {
+		
+		log.danger(error.stack);
+		return;
+		
+	}
+	
+	let injectSrc = gulp.src(ngsource.get(), {read: false});
 	
 	return gulp.src('docs/index.html')
 		.pipe(injector(injectSrc, injectOptions))
