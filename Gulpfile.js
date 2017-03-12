@@ -24,8 +24,6 @@ const reload = browserSync.reload;
 
 const log = require("bootstrap-logs");
 
-const util = require("./utils.js");
-
 /**
  * Fix for warning when running watchers on lib
  * Warning: Possible EventEmitter memory leak detected.
@@ -102,8 +100,6 @@ let destDir = {
  */
 gulp.task("default", function() {
 	
-	util.printTask("default");
-	
 	runSequence('init');
 	
 });
@@ -112,8 +108,6 @@ gulp.task("default", function() {
  * Initialization task
  */
 gulp.task("init", function() {
-	
-	util.printTask("init");
 	
 	try {
 		
@@ -151,8 +145,6 @@ gulp.task("init", function() {
  */
 gulp.task("clean:dist", function () {
 	
-	util.printTask("clean:dist");
-	
 	return del([
 		"app/dist"
 	]);
@@ -167,8 +159,6 @@ gulp.task("clean:dist", function () {
  * Compiles .scss to .css
  */
 gulp.task('sass', function() {
-	
-	util.printTask("sass");
 	
 	let processors = [
 		autoprefixer
@@ -225,8 +215,6 @@ gulp.task("eslint", function () {
  */
 gulp.task('inject', function () {
 	
-	util.printTask("inject");
-	
 	let injectOptions = {
 		ignorePath: 'app/',
 		addRootSlash: false,
@@ -241,8 +229,6 @@ gulp.task('inject', function () {
 });
 
 gulp.task('inject:add-remove-file', function () {
-	
-	util.printTask("inject:add-remove-file");
 	
 	let injectOptions = {
 		ignorePath: 'app/',
@@ -259,8 +245,6 @@ gulp.task('inject:add-remove-file', function () {
 
 
 gulp.task('inject:lib', function () {
-	
-	util.printTask("inject:lib");
 	
 	/**
 	 * devDependencies won't be injected into
@@ -284,8 +268,6 @@ gulp.task('inject:lib', function () {
  */
 gulp.task("serve", function () {
 	
-	util.printTask("serve");
-	
 	browserSync.init({
 		server: {
 			baseDir: "app"
@@ -303,8 +285,6 @@ gulp.task("serve", function () {
  * This effort is made to support Safari and Safari Mobile.
  */
 gulp.task("js-watch", function () {
-	
-	util.printTask("js-watch");
 	
 	let watcher = watch(srcFiles.js);
 	
@@ -374,8 +354,6 @@ gulp.task("js-watch", function () {
  */
 
 gulp.task('scss-watch', function(){
-	
-	util.printTask("scss-watch");
 	
 	let watcher = watch(srcFiles.scss);
 	
@@ -447,8 +425,6 @@ gulp.task('scss-watch', function(){
 
 gulp.task('html-watch', function () {
 	
-	util.printTask("html-watch");
-	
 	let watcher = watch(srcFiles.html);
 	
 	watcher.on('change', function (filepath) {
@@ -472,8 +448,6 @@ gulp.task('html-watch', function () {
 });
 
 gulp.task("lib-watch", function () {
-	
-	util.printTask("lib-watch");
 	
 	let watcher = watch([
 			"bower.json"
@@ -570,8 +544,6 @@ gulp.task("copy:others:docs", function () {
  * Injects .scss files into index.html
  */
 gulp.task('inject:docs', function () {
-	
-	util.printTask("inject:docs");
 	
 	let injectOptions = {
 		ignorePath: 'docs/',
