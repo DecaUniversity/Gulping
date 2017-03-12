@@ -44,24 +44,24 @@ For any new .js file that you create, please ensure that you follow the followin
   own injection.
 **/
 
-  'app/app.js',
-  'app/**/*module.js',
-  'app/**/*constants.js',
-  'app/**/*provider.js',
-  'app/**/*enum.js',
-  'app/**/*model.js',
-  'app/**/*config.js',
-  'app/**/*filter.js',
-  'app/**/*directive.js',
-  'app/**/*decorator.js',
-  'app/**/*interceptor.js',
-  'app/**/*service.js',
-  'app/**/*workflow.js',
-  'app/**/*repository.js',
-  'app/**/*resolver.js',
-  'app/**/*controller.js',
-  'app/**/*component.js',
-  'app/**/**.js'
+  'app/**/*.app.js',
+  'app/**/*.module.js',
+  'app/**/*.constants.js',
+  'app/**/*.provider.js',
+  'app/**/*.enum.js',
+  'app/**/*.model.js',
+  'app/**/*.config.js',
+  'app/**/*.filter.js',
+  'app/**/*.directive.js',
+  'app/**/*.decorator.js',
+  'app/**/*.interceptor.js',
+  'app/**/*.service.js',
+  'app/**/*.workflow.js',
+  'app/**/*.repository.js',
+  'app/**/*.resolver.js',
+  'app/**/*.controller.js',
+  'app/**/*.component.js',
+  'app/**/*.js'
 
   // Non-Angular scripts are injected last.
 ```
