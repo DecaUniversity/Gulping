@@ -10,6 +10,7 @@ const watch = require("gulp-watch");
 
 const sass = require("gulp-sass");
 const postcss = require("gulp-postcss");
+const concat = require("gulp-concat");
 const autoprefixer = require("autoprefixer");
 const eslint = require("gulp-eslint");
 const babel = require("gulp-babel");
@@ -167,6 +168,7 @@ gulp.task('sass', function() {
 	return gulp.src(srcFiles.scss)
 		.pipe(sass().on("error", sass.logError))
 		.pipe(postcss(processors))
+		.pipe(concat("maybelline.css"))
 		.pipe(gulp.dest(destDir.scss));
 	
 });
@@ -557,6 +559,7 @@ gulp.task('inject:docs', function () {
 			target: "docs",
 			ignore: "docs/lib"
 		}, [
+			"!docs/lib/**/*",
 			"docs/**/*.css"
 		]);
 		
@@ -567,7 +570,15 @@ gulp.task('inject:docs', function () {
 		
 	}
 	
-	let injectSrc = gulp.src(ngsource.get(), {read: false});
+	let files = ngsource.get();
+	
+	files.forEach(function (source, index) {
+		
+		files[index] = source.replace("app/dist/", "docs/");
+		
+	});
+	
+	let injectSrc = gulp.src(files, {read: false});
 	
 	return gulp.src('docs/index.html')
 		.pipe(injector(injectSrc, injectOptions))
