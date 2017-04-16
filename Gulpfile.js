@@ -105,10 +105,7 @@ gulp.task("default", function() {
 	
 });
 
-/**
- * Initialization task
- */
-gulp.task("init", function() {
+gulp.task("setSource", function () {
 	
 	try {
 		
@@ -117,9 +114,15 @@ gulp.task("init", function() {
 	} catch (error) {
 		
 		log.danger(error.stack);
-		return;
 		
 	}
+	
+});
+
+/**
+ * Initialization task
+ */
+gulp.task("init", function() {
 	
 	const cleaning = [
 		"clean:dist"
@@ -132,7 +135,7 @@ gulp.task("init", function() {
 		'lib-watch'
 	];
 	
-	runSequence(cleaning,'sass', 'eslint', 'transpile', 'inject', 'inject:lib', watching, "serve");
+	runSequence(cleaning, 'sass', 'eslint', 'transpile', 'setSource', 'inject', 'inject:lib', watching, "serve");
 	
 });
 
@@ -168,7 +171,7 @@ gulp.task('sass', function() {
 	return gulp.src(srcFiles.scss)
 		.pipe(sass().on("error", sass.logError))
 		.pipe(postcss(processors))
-		.pipe(concat("maybelline.css"))
+		.pipe(concat("main.css"))
 		.pipe(gulp.dest(destDir.scss));
 	
 });
